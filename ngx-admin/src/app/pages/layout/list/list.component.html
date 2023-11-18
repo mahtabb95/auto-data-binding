@@ -1,0 +1,417 @@
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<div>
+  <!-- <nb-card class="list-card">
+    <nb-card-header>Library</nb-card-header>
+    <nb-card-body>
+      <div class="container">
+        <h2>
+          Content
+        </h2>
+        create 1st modal
+        <div class="row align-items-start">
+          <div role="main">
+            <p-button (click)="triggerFirst()" data-toggle="modal1" data-target="#helloModal" type="button" class="test"
+              (click)="createNewBooks()">Add</p-button>
+            <p-button (click)="triggerSecond()" data-toggle="modal2" data-target="#importModal" type="button"
+              class="test">Upload file</p-button>
+          </div>
+          <div #helloModal class="modal fade" id="helloModal" role="dialog" aria-labelledby="helloModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="helloModalLabel">Import</h5>
+                  <p-button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </p-button>
+                </div>
+                <div class="modal-body">
+                  <form [formGroup]="bookForm" (submit)="saveForm()">
+                    <div class="form-group">
+                      <label class="col-form-label label" for="title">Title:</label>
+                      <input pInputText id="title" class="form-control" type="text" formControlName="title">
+                      <label class="col-form-label label" for="writer">Writer:</label>
+                      <input pInputText id="writer" class="form-control" type="text" formControlName="writer">
+                      <label class="col-form-label label" for="age">Age:</label>
+                      <input pInputText id="age" class="form-control" type="number" formControlName="age">
+                      <div class="married">
+                        <label class="col-form-label" for="ismarried">Married</label>
+                        <p-inputSwitch formControlName="ismarried" id="ismarried"></p-inputSwitch><br>
+                      </div>
+                      <label class="col-form-label label" for="education">Education:</label><br>
+                      <p-dropdown [options]="levels" placeholder="تحصیلات" formControlName="education" optionValue="dim"
+                        optionLabel="name">
+                        <ng-template let-levels pTemplate="levels">
+                          <div class="p-d-flex p-ai-center">
+                            <div>{{levels.name}}</div>
+                          </div>
+                        </ng-template>
+                      </p-dropdown>
+                      <br>
+                      <label class="col-form-label label" for="published">Published:</label>
+                      <div class="datepick">
+                        <input type="text" class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker
+                          [footerTemplate]="footerTemplate" #d="ngbDatepicker" formControlName="published" />
+                        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()"
+                          type="button"></button>
+                      </div>
+                      <p-button class="mbtn" type="submit">Done</p-button>
+                    </div>
+                  </form>
+                  <ng-template #footerTemplate>
+                    <hr class="my-0" />
+                    <button class="btn btn-secondary btn-sm m-2 float-end" (click)="d.close()">Close</button>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+          create 1st modal
+          create 2nd modal
+          <div role="main">
+
+          </div>
+          <div #importModal class="modal fade" id="importModal" role="dialog" aria-labelledby="importModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="importModalLabel">Upload file</h5>
+                  <p-button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </p-button>
+                </div>
+                <div class="modal-body">
+                  <form [formGroup]="bookForm" (submit)="saveExcel()">
+                    <div class="form-group">
+                      <label class="col-form-label" for="file">Upload file</label>
+                      <input #file type="file" name="Upload" id="file" (change)="readExcel($event)">
+                      <p-button type="submit">Done</p-button>
+                    </div>
+                  </form>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        End create 2nd modal
+
+      </div>
+
+    </nb-card-body>
+    <nb-card-body>
+      <p-confirmDialog></p-confirmDialog>
+      <p-table dataKey="id" [scrollable]="true" [filterDelay]="0" [value]="tableData" styleClass="p-datatable-gridlines"
+        [rows]="5" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,50]" [paginator]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['title', 'writer','age','ismarried','education.name', 'published']">
+        <ng-template pTemplate="caption">
+          <div>
+            <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="clear(dt1)"></button>
+            <i class="pi pi-filter-slash"></i>
+
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+
+            <th pSortableColumn="title" style="max-width:150px; font-size:12px">
+              <div class="flex justify-content-center align-items-center">
+                Title
+                <p-columnFilter type="text" field="title" display="menu" class="ml-auto"></p-columnFilter>
+
+              </div>
+            </th>
+            <th pSortableColumn="writer" style="max-width:150px; font-size:12px">
+              <div class="flex align-items-center">
+                Writer
+                <p-columnFilter type="text" field="writer" display="menu" class="ml-auto">
+                </p-columnFilter>
+              </div>
+            </th>
+            <th pSortableColumn="age" style="max-width:150px; font-size:12px">
+              <div class="flex justify-content-center align-items-center">
+                Age
+                <p-columnFilter type="numeric" field="age" display="menu" class="ml-auto"></p-columnFilter>
+              </div>
+            </th>
+
+            <th pSortableColumn="ismarried" style="max-width:150px; font-size:12px">
+              <div class="flex justify-content-center align-items-center">
+                Status
+                <p-columnFilter field="ismarried" matchMode="in" display="menu" [showMatchModes]="false"
+                  [showOperator]="false" [showAddButton]="false" class="ml-auto">
+                  <ng-template pTemplate="header">
+                    <div class="px-3 pt-3 pb-0">
+                      <span class="font-bold">Married status</span>
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <p-multiSelect [ngModel]="value" [options]="status" placeholder="Any"
+                      (onChange)="filter($event.value)" optionLabel="title" optionValue="statusId">
+                      <ng-template let-option pTemplate="item">
+                        <span class="ml-1">{{option.title}}</span>
+                      </ng-template>
+                    </p-multiSelect>
+                  </ng-template>
+                </p-columnFilter>
+
+              </div>
+            </th>
+            <th pSortableColumn="education" style="max-width:150px; font-size:12px">
+              <div class="flex align-items-center">
+                Education
+                <p-columnFilter field="education" matchMode="in" display="menu" [showMatchModes]="false"
+                  [showOperator]="false" [showAddButton]="false" class="ml-auto">
+                  <ng-template pTemplate="header">
+                    <div class="px-3 pt-3 pb-0">
+                      <span class="font-bold">Education level</span>
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <p-multiSelect [ngModel]="value" [options]="levels" placeholder="Any"
+                      (onChange)="filter($event.value)" optionLabel="name" optionValue="dim">
+                      <ng-template let-option pTemplate="item">
+                        <span class="ml-1">{{option.name}}</span>
+                      </ng-template>
+                    </p-multiSelect>
+                  </ng-template>
+                </p-columnFilter>
+              </div>
+            </th>
+            <th style="max-width:150px; font-size:12px">
+              <div class="flex align-items-center">
+                Published date
+                <p-columnFilter [field]="published" type="date" display="menu" operator="and" [showOperator]="false"
+                  [showMenu]="true" [showAddButton]="false" [showApplyButton]="false" [showClearButton]="false"
+                  class="ml-auto">
+
+                  <ng-template pTemplate="filter" let-filter="filterCallback">
+                    <div class="input-group">
+                      <div *ngIf="showRange[published];then showRangePicker else showDatePicker">
+                      </div>
+                      <ng-template #showDatePicker>
+                        <input class="form-control p-column-filter" #datePickerTemplate [firstDayOfWeek]="6" name="dp"
+                          ngbDatepicker #d="ngbDatepicker" (dateSelect)="dateFilter($event,'published')"
+                          outsideDays="hidden" type="hidden" [positionTarget]="dpBtn" />
+                        <button #dpBtn class="pi pi-calendar btn btn-outline-secondary calendar" (click)="d.toggle()"
+                          type="button"></button>
+                      </ng-template>
+                      <ng-template #showRangePicker>
+                        <input class="form-control p-column-filter" #datePickerTemplate [firstDayOfWeek]="6" name="dp"
+                          ngbDatepicker #d="ngbDatepicker" (dateSelect)="onDateSelection($event,published)"
+                          displayMonths="2" [autoClose]="'outside'" [dayTemplate]="t" outsideDays="hidden" tabindex="-1"
+                          type="hidden" [positionTarget]="dpBtn" />
+                        <button #dpBtn class="pi pi-calendar btn btn-outline-secondary calendar" (click)="d.toggle()"
+                          type="button"></button>
+                        <ng-template #t let-date let-focused="focused">
+                          <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date,published)"
+                            [class.faded]="isHovered(date,published) || isInside(date,published)"
+                            (mouseenter)="hoveredDate[published] = date" (mouseleave)="hoveredDate[published] = null">
+                            {{ date.day }}
+                          </span>
+                        </ng-template>
+                      </ng-template>
+                    </div>
+                  </ng-template>
+                </p-columnFilter>
+              </div>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product sortMode="multiple">
+          <tr (click)="selectBook(product)">
+
+            <td style="max-width:150px">{{product.title}}</td>
+            <td style="max-width:150px">{{product.writer}}</td>
+            <td style="max-width:150px">{{product.age}}</td>
+            <td style="max-width:150px">{{product.ismarried|statusPipe}}</td>
+            <td style="max-width:150px">{{product.education|educationPipe}}</td>
+            <td style="max-width:150px">{{product.published}}</td>
+            <td>
+              <p-button data-toggle="modal" data-target="#" type="button" class="test"
+                (click)="editBook(product)">Edit</p-button>
+              <p-button pRipple type="button" styleClass="p-button-danger" class="test"
+                (click)="deleteBooks(product)">Delete</p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </nb-card-body>
+  </nb-card>
+</div> -->
+
+  <!-- add columns dynamically to UI -->
+  <!-- <div class="dynamic-columns"> -->
+
+  <!-- start modal form -->
+  <!-- <ng-template #content let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Add Users</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="personForm" (submit)="savePerson()">
+          <div *ngFor="let title of personTableDataType">
+            <label for="title.name">{{title.name|titlecase}}:</label><br>
+            <input id="title.name" pInputText *ngIf="title.type === 'CharField' " type="text"
+              [formControlName]="title.name">
+            <div *ngIf="title.type === 'DateField'" class="datepick">
+              <input type="text" class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker
+                [footerTemplate]="footerTemplate" [minDate]="minDate" [maxDate]="maxDate" #d="ngbDatepicker"
+                [formControlName]="title.name" />
+              <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+            </div>
+            <input id="title.name" pInputText
+              *ngIf="(title.type === 'IntegerField' || title.type === 'AutoField') && !globals.pipeCols.includes(title.name)"
+              type="numeric" [formControlName]="title.name">
+            <div *ngIf="globals.pipeCols.includes(title.name)">
+
+              <p-dropdown [options]="pipes[title.name]" placeholder="{{title.name}}" [formControlName]="title.name"
+                optionValue="value" optionLabel="name">
+                <ng-template let-pipes pTemplate="pipes">
+                  <div class="p-d-flex p-ai-center">
+                    <div>{{pipes.name}}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('saved')">Save</button>
+      </div>
+    </ng-template> -->
+  <!-- End modal form -->
+  <!-- <nb-card class="list-card">
+      <nb-card-header>Dynamic Columns</nb-card-header>
+      <nb-card-body>
+        <div class="margin">
+          <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Add</button>
+          <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+            (click)="clear(dt1)"></button>
+        </div>
+        <p-table #dt1 dataKey="id" [value]="personTableData" [filterDelay]="0" responsiveLayout="scroll"
+          styleClass="p-datatable-gridlines">
+          <ng-template pTemplate="header">
+            <tr>
+              <th *ngFor="let title of personTableDataType">{{title.name}}
+
+                <p-columnFilter *ngIf="title.type === 'CharField' && !globals.pipeCols.includes(title.name)" type="text"
+                  [field]=title.name display="menu"></p-columnFilter>
+
+                <p-columnFilter *ngIf="globals.pipeCols.includes(title.name)" [field]=title.name matchMode="in"
+                  display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"
+                  class="ml-auto">
+                  <ng-template pTemplate="header">
+                    <div class="px-3 pt-3 pb-0">
+                      <span class="font-bold">{{title.name}}</span>
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <p-multiSelect [ngModel]="value" [options]="pipes[title.name]" placeholder="Any"
+                      (onChange)="filter($event.value)" optionValue="value" optionLabel="name">
+                      <ng-template let-option pTemplate="item">
+                        <span class="ml-1">{{option.name}}</span>
+                      </ng-template>
+                    </p-multiSelect>
+                  </ng-template>
+                </p-columnFilter>
+
+
+                <p-columnFilter *ngIf="title.type === 'DateField' && !globals.pipeCols.includes(title.name)" type="date"
+                  [field]=title.name display="row" operator="and" [showOperator]="false" [showMenu]="true"
+                  [showAddButton]="false" [showApplyButton]="false" [matchModeOptions]="dateMatchModeOptions"
+                  [showClearButton]="false" class="ml-auto">
+                  <ng-template pTemplate="filter" let-filter="filterCallback">
+                    <div class="input-group">
+                      <div *ngIf="showRange[title.name];then showRangePicker else showDatePicker">
+                      </div>
+                      <ng-template #showDatePicker>
+                        <input class="form-control p-column-filter" #datePickerTemplate [firstDayOfWeek]="6" name="dp"
+                          ngbDatepicker #d="ngbDatepicker" [minDate]="minDate" [maxDate]="maxDate"
+                          (dateSelect)="dateFilter($event,'title.name')" outsideDays="hidden" type="hidden"
+                          [positionTarget]="dpBtn" />
+                        <button #dpBtn class="pi pi-calendar btn btn-outline-secondary calendar" (click)="d.toggle()"
+                          type="button"></button>
+                      </ng-template>
+                      <ng-template #showRangePicker>
+                        <div class="cal">
+                          <input class="form-control p-column-filter" #datePickerTemplate [firstDayOfWeek]="6" name="dp"
+                            ngbDatepicker #d="ngbDatepicker" (dateSelect)="onDateSelection($event,title.name)"
+                            displayMonths="2" [autoClose]="'outside'" [dayTemplate]="t" outsideDays="hidden"
+                            tabindex="-1" type="hidden" [positionTarget]="dpBtn" />
+                          <button #dpBtn class="pi pi-calendar btn btn-outline-secondary calendar" (click)="d.toggle()"
+                            type="button"></button>
+                        </div>
+                        <ng-template #t let-date let-focused="focused">
+                          <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date,title.name)"
+                            [class.faded]="isHovered(date,title.name) || isInside(date,title.name)"
+                            (mouseenter)="hoveredDate[title.name] = date" (mouseleave)="hoveredDate[title.name] = null">
+                            {{ date.day }}
+                          </span>
+                        </ng-template>
+                      </ng-template>
+                    </div>
+                  </ng-template>
+                </p-columnFilter>
+
+                <p-columnFilter
+                  *ngIf="(title.type === 'IntegerField' || title.type === 'AutoField') && !globals.pipeCols.includes(title.name)"
+                  type="numeric" [field]=title.name display="menu"></p-columnFilter>
+
+              </th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-body>
+            <tr>
+              <td *ngFor="let key of personCol">
+                {{body[key] | usermarried: key}}
+              </td>
+              <td>
+                <p-button (click)="editUser(body, content)">Edit</p-button>
+                <p-button pRipple type="button" styleClass="p-button-danger" class="test"
+                  (click)="deleteUser(body)">Delete</p-button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </nb-card-body>
+    </nb-card>
+  </div> -->
+  <nb-card class="height">
+    <nb-card-body>
+      <h3>Form Generator</h3>
+      <p>Choose your table: </p>
+      <!-- <p-dropdown (ngModelChange)="goToForm($event)" [(ngModel)]="tableName" [options]="tablesName"
+      placeholder="فرم ها"></p-dropdown> -->
+      <select [(ngModel)]="selectedTableName" (change)="navigateToTableContent()">
+        <option *ngFor="let table of tablesName" [value]="table">{{ table }}</option>
+      </select>
+
+      <!-- <a [routerLink]="['form-generator', name]"> Navigate </a> -->
+
+    </nb-card-body>
+  </nb-card>
+  <!-- 
+
+<div *ngIf="typeof body[key] === 'number'">
+                <p-columnFilter type="numeric" field=key display="menu" class="ml-auto"></p-columnFilter>
+              </div>
+              <div *ngIf="typeof body[key] === 'string'">
+                <p-columnFilter type="text" field=key display="menu" class="ml-auto"></p-columnFilter>
+              </div>
+              <div *ngIf="typeof body[key] === 'date'">
+                <p-columnFilter type="date" field=key display="menu" class="ml-auto"></p-columnFilter>
+              </div> -->
+
+
+  <!-- add columns dynamically to UI -->

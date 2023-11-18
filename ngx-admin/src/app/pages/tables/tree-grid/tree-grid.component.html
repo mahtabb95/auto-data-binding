@@ -1,0 +1,49 @@
+<!-- <nb-card>
+  <form [formGroup]="bookForm" (submit)="saveForm()">
+    <input type="text" nbInput placeholder="Book Name" formControlName="title" class="inpt"><br>
+    <input nbInput placeholder="Published Date" [nbDatepicker]="formpick" formControlName="published" class="inpt">
+    <nb-datepicker #formpick></nb-datepicker><br>
+    <input type="text" nbInput shape="rectangle" placeholder="Author" formControlName="writer" class="inpt">
+    <br>
+    <ngx-jdatepicker dir="rtl" [(ngModel)]="dateObject" mode="day" placeholder="تاریخ" theme="dp-material">
+    </ngx-jdatepicker> -->
+<!-- <button nbButton type="submit" class="edit-btn">
+  <span *ngIf="!id">Create</span>
+  <span *ngIf="id">Update</span>
+</button>
+</form>
+<nb-card-body>
+  <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
+  </ng2-smart-table> -->
+
+<!-- 
+    <label class="search-label" for="search">Search:</label>
+    <input nbInput [nbFilterInput]="dataSource" id="search" class="search-input">
+
+    <table [nbTreeGrid]="dataSource" [nbSort]="dataSource" (sort)="updateSort($event)">
+
+      <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+      <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
+
+      <ng-container [nbTreeGridColumnDef]="customColumn">
+        <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(customColumn)" *nbTreeGridHeaderCellDef>
+          {{customColumn}}
+        </th>
+        <td nbTreeGridCell *nbTreeGridCellDef="let row">
+          <ngx-fs-icon [kind]="row.data.kind" [expanded]="row.expanded"></ngx-fs-icon>
+          {{row.data[customColumn]}}
+        </td>
+      </ng-container>
+
+      <ng-container *ngFor="let column of defaultColumns; let index = index" [nbTreeGridColumnDef]="column"
+        [showOn]="getShowOn(index)">
+        <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(column)" *nbTreeGridHeaderCellDef>
+          {{column}}
+        </th>
+        <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data[column] || '-'}}</td>
+      </ng-container>
+
+    </table> -->
+
+<!-- </nb-card-body>
+</nb-card> -->

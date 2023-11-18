@@ -1,0 +1,59 @@
+@import '../../../@theme/styles/themes';
+@import "primeicons/primeicons.css";
+
+@include nb-install-component() {
+  .list-card {
+    nb-card-header {
+      border-bottom: none;
+    }
+
+    nb-card-body {
+      padding: 0 0 20px 10px;
+    }
+    .container h2{
+      margin-top: 50px;
+    }
+    .row{
+      margin-top: 30px;
+    }
+    .test{
+      margin-left: 10px;
+    }
+    .grid{
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+    }
+    .inpt{
+      margin: 5px;
+    }
+    .datepick{
+      display: flex;
+    }
+    .married{
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .married label{
+      margin-right: 10px;
+    }
+    .mbtn{
+      margin-top: 15px;
+    }
+    .label{
+      margin-top: 15px;
+    }
+    .margin button{
+      margin: 10px;
+    }
+    .cal{
+      display: flex;
+      width: 90%;
+    }
+    
+  }
+  .height{
+    height: 500px;
+  }
+  
+}
