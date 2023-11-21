@@ -7,6 +7,7 @@ import { AccordionComponent } from './accordion/accordion.component';
 import { InfiniteListComponent } from './infinite-list/infinite-list.component';
 import { ListComponent } from './list/list.component';
 import { TableContentComponent } from './table-content/table-content.component';
+
 // import { StepperComponent } from './stepper/stepper.component';
 
 const routes: Routes = [{

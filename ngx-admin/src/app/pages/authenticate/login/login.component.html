@@ -1,0 +1,25 @@
+<nb-card>
+    <nb-card-header>Login</nb-card-header>
+    <nb-card-body>
+        <!-- <ng-template> -->
+        <!-- <div class="container" novalidate> -->
+        <form [formGroup]="loginForm" (submit)="onSubmit()">
+            <label for="username">Username:</label><br>
+            <input id="username" pInputText type="text" placeholder="نام کاربری" formControlName="username"><br>
+            <div *ngIf="loginForm.get('username').touched && loginForm.get('username').invalid">
+                <span class="text-error" *ngIf="loginForm.get('username').errors.required">User name is required!</span>
+            </div>
+            <label for="password">Password: </label><br>
+            <input pInputText type="password" placeholder="رمز عبور" formControlName="password"><br>
+            <div *ngIf="loginForm.get('password').touched && loginForm.get('password').invalid">
+                <span class="text-error" *ngIf="loginForm.get('password').errors.required">Password is required!</span>
+                <span class="text-error" *ngIf="loginForm.get('password').errors.minlength">Your password must be at
+                    least 8 characters!</span>
+
+            </div>
+            <button type="submit" [disabled]="loginForm.invalid">Login</button>
+        </form>
+        <!-- </div> -->
+        <!-- </ng-template> -->
+    </nb-card-body>
+</nb-card>

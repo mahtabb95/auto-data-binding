@@ -185,6 +185,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'Login',
+    link: '/pages/login',
+  },
+  {
     title: 'Editors',
     icon: 'text-outline',
     children: [
