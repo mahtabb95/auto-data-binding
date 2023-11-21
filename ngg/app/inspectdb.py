@@ -128,6 +128,7 @@ from rest_framework import viewsets,serializers,status
 from django.apps import apps
 from django.http import JsonResponse
 from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
 from .dbmodels import {table_name_string}
 from .serializers import {serializersName_string}
 
@@ -138,10 +139,12 @@ for model in table_name:
 class {model}ViewSet(viewsets.ModelViewSet):
     queryset = {model}.objects.all()
     serializer_class = {model}Serializer
+    authentication_classes = (TokenAuthentication,)
 
 """
 views_content += f"""
 class TableListView(viewsets.GenericViewSet):
+    authentication_classes = (TokenAuthentication,)
     def list(self, request):
         table_name = []
         django_tables = [
@@ -169,6 +172,7 @@ class TableListView(viewsets.GenericViewSet):
 
 
 class TableContentView(viewsets.GenericViewSet):
+    authentication_classes = (TokenAuthentication,)
     def list(self, request, table_name):
         model = apps.get_model(app_label="app", model_name=table_name)
         if model is None:

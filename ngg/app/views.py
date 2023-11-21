@@ -1,38 +1,51 @@
-
-from rest_framework import viewsets,serializers,status
+from rest_framework import viewsets, serializers, status
 from django.apps import apps
 from django.http import JsonResponse
 from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
 from .dbmodels import Hidden, Tperson, Tpipe, Tpipes, Book
-from .serializers import HiddenSerializer, TpersonSerializer, TpipeSerializer, TpipesSerializer, BookSerializer
+from .serializers import (
+    HiddenSerializer,
+    TpersonSerializer,
+    TpipeSerializer,
+    TpipesSerializer,
+    BookSerializer,
+)
 
 
 class HiddenViewSet(viewsets.ModelViewSet):
     queryset = Hidden.objects.all()
     serializer_class = HiddenSerializer
+    authentication_classes = (TokenAuthentication,)
 
 
 class TpersonViewSet(viewsets.ModelViewSet):
     queryset = Tperson.objects.all()
     serializer_class = TpersonSerializer
+    authentication_classes = (TokenAuthentication,)
 
 
 class TpipeViewSet(viewsets.ModelViewSet):
     queryset = Tpipe.objects.all()
     serializer_class = TpipeSerializer
+    authentication_classes = (TokenAuthentication,)
 
 
 class TpipesViewSet(viewsets.ModelViewSet):
     queryset = Tpipes.objects.all()
     serializer_class = TpipesSerializer
+    authentication_classes = (TokenAuthentication,)
 
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    authentication_classes = (TokenAuthentication,)
 
 
 class TableListView(viewsets.GenericViewSet):
+    authentication_classes = (TokenAuthentication,)
+
     def list(self, request):
         table_name = []
         django_tables = [
@@ -50,7 +63,7 @@ class TableListView(viewsets.GenericViewSet):
             "django_migrations",
             "app_app",
             "app_publish",
-            "hiddenColumns"
+            "hiddenColumns",
         ]
         for model in apps.get_models():
             if model._meta.db_table not in django_tables:
@@ -60,6 +73,8 @@ class TableListView(viewsets.GenericViewSet):
 
 
 class TableContentView(viewsets.GenericViewSet):
+    authentication_classes = (TokenAuthentication,)
+
     def list(self, request, table_name):
         model = apps.get_model(app_label="app", model_name=table_name)
         if model is None:
@@ -142,6 +157,3 @@ class TableContentView(viewsets.GenericViewSet):
         instance = self.get_object()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
