@@ -5,6 +5,8 @@ import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-header',
@@ -45,10 +47,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private themeService: NbThemeService,
     private userService: UserData,
     private layoutService: LayoutService,
-    private breakpointService: NbMediaBreakpointsService) {
+    private breakpointService: NbMediaBreakpointsService,
+    private router: Router,
+    private cookieService: CookieService,
+  ) {
   }
 
   ngOnInit() {
+
     this.currentTheme = this.themeService.currentTheme;
 
     this.userService.getUsers()
@@ -90,5 +96,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   navigateHome() {
     this.menuService.navigateHome();
     return false;
+  }
+  logout() {
+    this.cookieService.delete('token');
+    this.router.navigate(['pages/login']);
   }
 }

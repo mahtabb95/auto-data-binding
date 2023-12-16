@@ -8,6 +8,7 @@
   <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
     <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
   </nb-select>
+  <button class="btn btn-lg btn-outline-primary" (click)="logout()">Logout</button>
 </div>
 
 <div class="header-container">

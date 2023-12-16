@@ -3,14 +3,27 @@ from django.apps import apps
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .dbmodels import Hidden, Tperson, Tpipe, Tpipes, Book
 from .serializers import (
     HiddenSerializer,
     TpersonSerializer,
+    UserSerializer,
     TpipeSerializer,
     TpipesSerializer,
     BookSerializer,
 )
+from django.contrib.auth.models import User
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    authentication_classes = (TokenAuthentication,)
 
 
 class HiddenViewSet(viewsets.ModelViewSet):
@@ -23,6 +36,7 @@ class TpersonViewSet(viewsets.ModelViewSet):
     queryset = Tperson.objects.all()
     serializer_class = TpersonSerializer
     authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
 
 
 class TpipeViewSet(viewsets.ModelViewSet):
@@ -74,6 +88,7 @@ class TableListView(viewsets.GenericViewSet):
 
 class TableContentView(viewsets.GenericViewSet):
     authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
 
     def list(self, request, table_name):
         model = apps.get_model(app_label="app", model_name=table_name)

@@ -6,6 +6,7 @@ from .views import (
     TableListView,
     TableContentView,
     HiddenViewSet,
+    UserViewSet,
 )
 
 
@@ -14,6 +15,7 @@ router.register("person", TpersonViewSet, basename="person")
 router.register("pipe", TpipesViewSet)
 router.register("table", TableListView, basename="table")
 router.register("hidden", HiddenViewSet)
+router.register("users", UserViewSet)
 
 
 urlpatterns = [

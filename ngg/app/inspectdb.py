@@ -46,20 +46,20 @@ fout.close()
 finalFile = "dbmodels.txt"
 finalBase = os.path.splitext(finalFile)[0]
 os.rename(finalFile, finalBase + ".py")
-os.remove("C:/Users/asus/Desktop/ngg/dbmodel.txt")
-os.remove("C:/Users/asus/Desktop/ngg/app/dbmodels.py")
+os.remove("C:/Users/asus/Desktop/first/ngg/dbmodel.txt")
+os.remove("C:/Users/asus/Desktop/first/ngg/app/dbmodels.py")
 os.rename(
-    "C:/Users/asus/Desktop/ngg/dbmodels.py",
-    "C:/Users/asus/Desktop/ngg/app/dbmodels.py",
+    "C:/Users/asus/Desktop/first/ngg/dbmodels.py",
+    "C:/Users/asus/Desktop/first/ngg/app/dbmodels.py",
 )
 
-os.system(mkmigrate)
-os.system(migrate)
+# os.system(mkmigrate)
+# os.system(migrate)
 
 # from pathlib import Path
 
 
-models_file_path = "C:/Users/asus/Desktop/ngg/app/dbmodels.py"
+models_file_path = "C:/Users/asus/Desktop/first/ngg/app/dbmodels.py"
 
 
 with open(models_file_path, "r") as models_file:
@@ -88,6 +88,10 @@ django_tables = [
     "BooksBook",
     "AuthGroupPermissions",
     "AppApp",
+    "AppUser",
+    "AppUserGroups",
+    "AppUserUserPermissions",
+    "AuthtokenToken",
 ]
 for model in model_names:
     if model not in django_tables:
@@ -102,6 +106,12 @@ table_name_string = ", ".join(table_name)
 serializers_content = f"""
 from rest_framework import serializers
 from .dbmodels import {table_name_string}
+from django.contrib.auth.models import User
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id','username','password')
 """
 
 admin_content = f"""
@@ -260,9 +270,9 @@ class TableContentView(viewsets.GenericViewSet):
 
 """
 
-serializers_file_path = "C:/Users/asus/Desktop/ngg/app/serializers.py"
-views_file_path = "C:/Users/asus/Desktop/ngg/app/views.py"
-admin_file_path = "C:/Users/asus/Desktop/ngg/app/admin.py"
+serializers_file_path = "C:/Users/asus/Desktop/first/ngg/app/serializers.py"
+views_file_path = "C:/Users/asus/Desktop/first/ngg/app/views.py"
+admin_file_path = "C:/Users/asus/Desktop/first/ngg/app/admin.py"
 with open(serializers_file_path, "w") as serializers_file:
     serializers_file.write(serializers_content)
 with open(views_file_path, "w") as views_file:

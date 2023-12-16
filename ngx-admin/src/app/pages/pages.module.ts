@@ -9,6 +9,7 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { LoginComponent } from './authenticate/login/login.component';
 import { NbCardModule } from '@nebular/theme';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   imports: [
@@ -26,6 +27,9 @@ import { NbCardModule } from '@nebular/theme';
     PagesComponent,
     LoginComponent,
   ],
+  providers: [
+    CookieService,
+  ]
 })
 export class PagesModule {
 }

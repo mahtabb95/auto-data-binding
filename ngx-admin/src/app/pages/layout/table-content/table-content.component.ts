@@ -20,6 +20,8 @@ import {
 import * as moment from 'jalali-moment';
 import { Table } from 'primeng/table';
 import { FormControl, FormGroup, FormsModule } from '@angular/forms';
+import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 // import { MatIconModule } from '@angular/material/icon';
 
 const WEEKDAYS_SHORT = ['د', 'س', 'چ', 'پ', 'ج', 'ش', 'ی'];
@@ -93,6 +95,8 @@ export class TableContentComponent implements OnInit {
     public formatter: NgbDateParserFormatter,
     // private fileSaver: FileSaverService,
     private confirmationService: ConfirmationService,
+    private router: Router,
+    private cookieService: CookieService,
   ) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
@@ -154,26 +158,31 @@ export class TableContentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.tableName = params['tableName'];
-      this.hiddenColumns();
-      this.loadTableData();
-    });
-    this.pipes = this.globals.pipeDropdown;
-  }
+    const token = this.cookieService.get('token');
+    if (!token) {
+      this.router.navigate(['pages/login']);
+    } else {
+      this.route.params.subscribe(params => {
+        this.tableName = params['tableName'];
+        this.hiddenColumns();
+        this.loadTableData();
+      });
+      this.pipes = this.globals.pipeDropdown;
+    }
+  };
   hiddenColumns() {
     this.apiService.hiddenColumns().subscribe((data: any) => {
       data.forEach(element => {
         this.columns.push(element.colname);
       })
       console.log("columns", this.columns);
-    })
+    });
 
-  }
+  };
   loadTableData() {
 
     this.apiService.getTableContent(this.tableName).subscribe((data: any) => {
-      console.log("full data: ", data)
+      console.log("full data: ", data);
       this.tbData = data.field_names;
       this.tbData.forEach(element => {
         if (!this.columns.includes(element)) {
@@ -185,8 +194,8 @@ export class TableContentComponent implements OnInit {
       data.field_type.forEach(element => {
         if (element.type === 'DateField') {
           this.dateFieldName = element.name;
-        }
-      })
+        };
+      });
       data.table_content.forEach(element => {
         if (element[this.dateFieldName]) {
           element[this.dateFieldName] = moment(element[this.dateFieldName], 'YYYY-M-D').format('jYYYY-jM-jD');

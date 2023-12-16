@@ -4,7 +4,7 @@ import { ApiService } from '../../../api.service';
 import * as XLSX from 'xlsx';
 import * as bootstrap from 'bootstrap';
 import { ConfirmationService, FilterMatchMode, SelectItem } from 'primeng/api';
-
+import { CookieService } from 'ngx-cookie-service';
 import {
   NgbDateStruct,
   ModalDismissReasons,
@@ -115,7 +115,8 @@ export class ListComponent implements OnInit, AfterViewInit {
     private confirmationService: ConfirmationService,
     private modalService: NgbModal,
     public globals: Globals,
-    private router: Router
+    private router: Router,
+    private cookieService: CookieService,
   ) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
@@ -215,81 +216,68 @@ export class ListComponent implements OnInit, AfterViewInit {
   selectedTableName: string;
 
   ngOnInit(): void {
-
-    let val = {
-      id: null,
-      published: null,
-      title: null,
-      writer: null,
-      age: null,
-      ismarried: null,
-      education: null,
-    }
-    this.id = val.id;
-    // this.calendarVal = new Date(val.published);
-    this.bookForm = new FormGroup({
-      title: new FormControl(val.title),
-      writer: new FormControl(val.writer),
-      published: new FormControl(this.calendarVal),
-      age: new FormControl(val.age),
-      ismarried: new FormControl(val.ismarried),
-      education: new FormControl(val.education),
-    });
-    this.apiService.getTablesName().subscribe((data: any) => {
-
-      this.tablesName = data
-      console.log(this.tablesName)
-    })
-
-    // this.apiService.getBooks().subscribe((data: any) => {
-    //   this.tableData = data
-
-
-    //   this.tableData.forEach(element => {
-    //     element.published = moment(element.published, 'YYYY-M-D').format('jYYYY-jM-jD')
-    //   });
-
-    // }
-    // )
-    // this.apiService.getEducation().subscribe(
-    //   data => this.levels = data
-    // )
-    // this.apiService.getMarried().subscribe(
-    //   data => this.status = data
-    // )
-
-    this.pipes = this.globals.pipeDropdown
-    this.apiService.getPerson().subscribe((result: any) => {
-      this.personTable = result
-      console.log(this.personTable)
-
-      this.personTableData = this.personTable.data
-      this.personTableDataType = this.personTable.dataTypes
-      console.log("persontabledata", this.personTableData)
-
-      this.personTableData.forEach(element => {
-        element.birthdate = moment(element.birthdate, 'YYYY-M-D').format('jYYYY-jM-jD')
-        this.dataCol.push(element)
-      });
-      this.personTableDataType.forEach(element => {
-        this.dataTypeCol.push(element.type)
-      })
-      let headers = []
-      for (let key in this.dataCol[0]) {
-        headers.push(key)
+    const token = this.cookieService.get('token');
+    if (!token) {
+      this.router.navigate(['pages/login']);
+    } else {
+      let val = {
+        id: null,
+        published: null,
+        title: null,
+        writer: null,
+        age: null,
+        ismarried: null,
+        education: null,
       }
-      this.personCol = headers
-      console.log('personTableDataType ', this.personTableDataType)
+      this.id = val.id;
+      // this.calendarVal = new Date(val.published);
+      this.bookForm = new FormGroup({
+        title: new FormControl(val.title),
+        writer: new FormControl(val.writer),
+        published: new FormControl(this.calendarVal),
+        age: new FormControl(val.age),
+        ismarried: new FormControl(val.ismarried),
+        education: new FormControl(val.education),
+      });
+      this.apiService.getTablesName().subscribe((data: any) => {
+
+        this.tablesName = data,
+          console.log(this.tablesName)
+      });
+      this.pipes = this.globals.pipeDropdown;
+      this.apiService.getPerson().subscribe((result: any) => {
+        this.personTable = result;
+        console.log(this.personTable);
+
+        this.personTableData = this.personTable.data;
+        this.personTableDataType = this.personTable.dataTypes;
+        console.log("persontabledata", this.personTableData);
+
+        this.personTableData.forEach(element => {
+          element.birthdate = moment(element.birthdate, 'YYYY-M-D').format('jYYYY-jM-jD');
+          this.dataCol.push(element);
+        });
+        this.personTableDataType.forEach(element => {
+          this.dataTypeCol.push(element.type);
+        })
+        let headers = [];
+        for (let key in this.dataCol[0]) {
+          headers.push(key);
+        }
+        this.personCol = headers;
+        console.log('personTableDataType ', this.personTableDataType);
 
 
-      let group = {}
-      this.personCol.forEach(input_template => {
-        group[input_template] = new FormControl('');
-      })
-      this.personForm = new FormGroup(group);
+        let group = {};
+        this.personCol.forEach(input_template => {
+          group[input_template] = new FormControl('');
+        });
+        this.personForm = new FormGroup(group);
 
 
-    })
+      });
+    };
+
 
     this.cols = [
       {
@@ -318,7 +306,7 @@ export class ListComponent implements OnInit, AfterViewInit {
         header: 'Published'
       },
     ];
-  }
+  };
 
   navigateToTableContent() {
     if (this.selectedTableName) {
@@ -341,8 +329,8 @@ export class ListComponent implements OnInit, AfterViewInit {
       return 'by clicking on a backdrop';
     } else {
       return `with: ${reason}`;
-    }
-  }
+    };
+  };
   open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
       (result) => {

@@ -17,8 +17,13 @@
                     least 8 characters!</span>
 
             </div>
-            <button type="submit" [disabled]="loginForm.invalid">Login</button>
+            <button type="submit" [disabled]="loginForm.invalid">Login
+                <!-- <span *ngIf="!registerMode">Login</span>
+                <span *ngIf="registerMode">Register</span> -->
+            </button>
         </form>
+        <!-- <span *ngIf="!registerMode" (click)="registerMode=true">Don't have an account? Register here.</span>
+        <span *ngIf="registerMode" (click)="registerMode=false">Already have an account? Click to Login</span> -->
         <!-- </div> -->
         <!-- </ng-template> -->
     </nb-card-body>
