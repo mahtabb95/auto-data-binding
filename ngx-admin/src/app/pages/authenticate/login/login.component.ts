@@ -23,11 +23,11 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const token = this.cookieService.get('token');
-    if (token) {
-      this.router.navigate(['pages/layout/list'])
-    }
-    console.log(token)
+    // const token = this.cookieService.get('token');
+    // console.log("token: ", token)
+    // if (token) {
+    //   this.router.navigate(['pages/layout/list'])
+    // }
     this.loginForm = new FormGroup({
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
@@ -40,11 +40,12 @@ export class LoginComponent implements OnInit {
       alert("Invalid form")
     }
     this.apiService.loginUser(this.loginForm.value).subscribe((data: TokenObj) => {
-      console.log(data),
-        error => console.log(error),
-        this.cookieService.set('token', data.token)
+      console.log(data);
+      this.cookieService.set('token', data.token);
       this.router.navigate(['pages/layout/list'])
-    });
+    },
+      error => console.log(error),
+    );
     // this.apiService.loginUser(this.loginForm.value).subscribe((data: TokenObj) => {
     //   console.log(data)
     // })

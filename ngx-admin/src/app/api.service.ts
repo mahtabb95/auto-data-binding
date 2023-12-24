@@ -24,14 +24,23 @@ export class ApiService {
   baseUrlAuth = 'http://127.0.0.1:8000/auth/';
   baseUrlRegister = 'http://127.0.0.1:8000/users/'
 
-  headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-  });
   constructor(
     private httpClient: HttpClient,
-    private csrfTokenService: CsrfTokenServiceService,
     private cookieService: CookieService,
   ) { }
+  token = this.cookieService.get('token');
+  headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    // Authorization: `Token ${this.token}`
+  });
+  getAuthHeaders() {
+    const token = this.cookieService.get('token')
+    console.log(token)
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Token ${token}`
+    })
+  }
 
   // getBooks() {
   //   return this.httpClient.get(this.baseUrl, { headers: this.headers });
@@ -49,7 +58,7 @@ export class ApiService {
     return this.httpClient.get(this.baseUrlPipe, { headers: this.headers });
   }
   getTablesName() {
-    return this.httpClient.get(this.baseUrlTable, { headers: this.getAuthHeaders() });
+    return this.httpClient.get(this.baseUrlTable, { headers: this.headers });
   }
 
   getTableContent(tableName: string) {
@@ -76,22 +85,16 @@ export class ApiService {
     return this.httpClient.delete(`${this.baseUrlPerson}${userid}/`, { headers: this.getAuthHeaders() });
   }
   hiddenColumns() {
-    return this.httpClient.get<any[]>(`${this.baseUrlHidden}`, { headers: this.getAuthHeaders() })
+    return this.httpClient.get<any[]>(`${this.baseUrlHidden}`, { headers: this.headers })
   }
   loginUser(authData) {
     const body = JSON.stringify(authData);
-    return this.httpClient.post(`${this.baseUrlAuth}`, body, { headers: this.getAuthHeaders() })
+    return this.httpClient.post(`${this.baseUrlAuth}`, body, { headers: this.headers })
   }
   registerUser(authData) {
     const body = JSON.stringify(authData);
-    return this.httpClient.post(`${this.baseUrlRegister}`, body, { headers: this.getAuthHeaders() })
+    return this.httpClient.post(`${this.baseUrlRegister}`, body, { headers: this.headers })
   }
-  getAuthHeaders() {
-    const token = this.cookieService.get('token')
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      // Authorization: `Token ${token}`
-    })
-  }
+
 
 }
