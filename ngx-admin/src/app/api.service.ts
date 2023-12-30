@@ -67,8 +67,8 @@ export class ApiService {
   createData(data, tableName) {
     return this.httpClient.post(`${this.baseUrlPostTable}${tableName}/`, data, { headers: this.getAuthHeaders() });
   }
-  updateData(data, tableName) {
-    return this.httpClient.put(`${this.baseUrlPostTable}${tableName}/${data.id}/`, data, { headers: this.getAuthHeaders() });
+  updateData(data, id: any, tableName) {
+    return this.httpClient.put(`${this.baseUrlPostTable}${tableName}/${id}/`, data, { headers: this.getAuthHeaders() });
   }
   deleteData(id: any, tableName) {
     return this.httpClient.delete(`${this.baseUrlPostTable}${tableName}/${id}/`, { headers: this.getAuthHeaders() });

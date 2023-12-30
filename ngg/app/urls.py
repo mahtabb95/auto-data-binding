@@ -1,5 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
+from django.contrib.auth.decorators import permission_required
 from .views import (
     TpersonViewSet,
     TpipesViewSet,

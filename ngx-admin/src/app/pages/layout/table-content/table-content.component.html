@@ -1,5 +1,8 @@
 <p-confirmDialog [style]="{width: '40vw'}" [baseZIndex]="999999" acceptButtonStyleClass="p-button-danger"
     rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
+<!-- <div *ngIf="error"> -->
+<!-- <ngb-alert *ngIf="error" [type]="alert.type" (closed)="close(alert)">{{ alert.message }}</ngb-alert> -->
+<!-- </div> -->
 <div class="container" *ngIf="tableName">
     <nb-card class="list-card">
         <nb-card-header>{{ tableName }} Content</nb-card-header>

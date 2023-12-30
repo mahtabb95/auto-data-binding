@@ -3,9 +3,14 @@ from django.apps import apps
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import (
+    IsAuthenticated,
+    DjangoMahtabModelPermissions,
+    DjangoObjectPermissions,
+)
 from .dbmodels import Hidden, Tperson, Tpipe, Tpipes, Book, Sysdiagrams
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import permission_required
 
 from .serializers import (
     HiddenSerializer,
@@ -85,7 +90,7 @@ class TableListView(viewsets.GenericViewSet):
 
 class TableContentView(viewsets.GenericViewSet):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (DjangoMahtabModelPermissions,)
 
     def list(self, request, table_name):
         model = apps.get_model(app_label="app", model_name=table_name)

@@ -46,9 +46,7 @@ export class LoginComponent implements OnInit {
     },
       error => console.log(error),
     );
-    // this.apiService.loginUser(this.loginForm.value).subscribe((data: TokenObj) => {
-    //   console.log(data)
-    // })
+
   }
 
 }

@@ -22,10 +22,21 @@ import { Table } from 'primeng/table';
 import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
+
 // import { MatIconModule } from '@angular/material/icon';
 
+interface Alert {
+  type: string;
+  message: string;
+}
 const WEEKDAYS_SHORT = ['د', 'س', 'چ', 'پ', 'ج', 'ش', 'ی'];
 const MONTHS = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+
+const ALERTS: Alert[] = [
+  {
+    type: 'Access denied',
+    message: "You don't have permission to do this action!",
+  }];
 
 @Injectable()
 export class NgbDatepickerI18nPersian extends NgbDatepickerI18n {
@@ -115,6 +126,12 @@ export class TableContentComponent implements OnInit {
 
   fromDate: NgbDate;
   toDate: NgbDate | null = null;
+  alerts: Alert[];
+  error = null;
+
+  close(alert: Alert) {
+    this.alerts.splice(this.alerts.indexOf(alert), 1);
+  }
 
   onDateSelection(date: NgbDate) {
     console.log(date)
@@ -174,7 +191,11 @@ export class TableContentComponent implements OnInit {
     this.apiService.hiddenColumns().subscribe((data: any) => {
       data.forEach(element => {
         this.columns.push(element.colname);
-      })
+      });
+      // (error) => {
+      //   this.error = error.message;
+      //   console.log(this.error)
+      // }
       console.log("columns", this.columns);
     });
 
@@ -214,7 +235,12 @@ export class TableContentComponent implements OnInit {
       });
       this.formGenerator = new FormGroup(group);
 
-    });
+    }
+      // (error) => {
+      //   this.error = error.message;
+      //   console.log(this.error)
+      // }
+    );
 
   }
 
@@ -297,7 +323,7 @@ export class TableContentComponent implements OnInit {
       this.formGenerator.value[this.dateFieldName] = miladi_d
     }
     if (this.id) {
-      this.apiService.updateData(this.formGenerator.value, this.tableName).subscribe(
+      this.apiService.updateData(this.formGenerator.value, this.id, this.tableName).subscribe(
         result => {
           this.dataUpdated(result)
           console.log(result)

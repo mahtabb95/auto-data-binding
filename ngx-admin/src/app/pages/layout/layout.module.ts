@@ -14,7 +14,7 @@ import {
   NbDatepicker,
 } from '@nebular/theme';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { ThemeModule } from '../../@theme/theme.module';
 import { LayoutRoutingModule } from './layout-routing.module';
 import { LayoutComponent } from './layout.component';
@@ -48,7 +48,7 @@ import { UsermarriedPipe } from '../../usermarried.pipe';
   imports: [
     FormsModule,
     NgbDatepickerModule,
-
+    NgbAlertModule,
     ReactiveFormsModule,
     ThemeModule,
     NbTabsetModule,
