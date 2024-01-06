@@ -7,10 +7,13 @@ from rest_framework.permissions import (
     IsAuthenticated,
     DjangoMahtabModelPermissions,
     DjangoObjectPermissions,
+    AllowAny,
 )
 from .dbmodels import Hidden, Tperson, Tpipe, Tpipes, Book, Sysdiagrams
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user
 from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.models import Permission
 
 from .serializers import (
     HiddenSerializer,
@@ -61,31 +64,89 @@ class BookViewSet(viewsets.ModelViewSet):
 
 class TableListView(viewsets.GenericViewSet):
     authentication_classes = (TokenAuthentication,)
+    permission_classes = (AllowAny,)
+
+    # def get_queryset(self):
+    #     table_name = []
+    #     django_tables = [
+    #         "django_admin_log",
+    #         "auth_permission",
+    #         "auth_group",
+    #         "auth_user",
+    #         "django_content_type",
+    #         "django_session",
+    #         "auth_group_permissions",
+    #         "auth_user_groups",
+    #         "auth_user_user_permissions",
+    #         "books_book",
+    #         "books_dimeducation",
+    #         "django_migrations",
+    #         "app_app",
+    #         "app_publish",
+    #         "hiddenColumns",
+    #         "authtoken_token",
+    #         "sysdiagrams",
+    #     ]
+    #     for model in apps.get_models():
+    #         if model._meta.db_table not in django_tables:
+    #             table_name.append(model._meta.db_table)
+
+    #     return {"table_name": table_name}
+
+    def userView(self, request):
+        username = request.user
+        if request.user.is_authenticated():
+            username = request.user.username
+            print(username)
 
     def list(self, request):
-        table_name = []
-        django_tables = [
-            "django_admin_log",
-            "auth_permission",
-            "auth_group",
-            "auth_user",
-            "django_content_type",
-            "django_session",
-            "auth_group_permissions",
-            "auth_user_groups",
-            "auth_user_user_permissions",
-            "books_book",
-            "books_dimeducation",
-            "django_migrations",
-            "app_app",
-            "app_publish",
-            "hiddenColumns",
-        ]
-        for model in apps.get_models():
-            if model._meta.db_table not in django_tables:
-                table_name.append(model._meta.db_table)
-        self.queryset = table_name
-        return Response(table_name)
+        perms = self.request.user.get_all_permissions()
+        print(perms)
+        permission = []
+        psplite = []
+        for perm in perms:
+            permission.append(perm[4:])
+        for perm in permission:
+            perms_splite = perm.split("_")
+            psplite.append(perms_splite)
+        print(permission)
+        print(psplite)
+        result_dict = {}
+
+        for action, target in psplite:
+            if target not in result_dict:
+                result_dict[target] = [action]
+            else:
+                result_dict[target].append(action)
+
+        result_dict = {key: sorted(value) for key, value in result_dict.items()}
+        table_perms = list(result_dict.keys())
+        print("allowed tables: ", table_perms)
+        # table_name = []
+        # django_tables = [
+        #     "django_admin_log",
+        #     "auth_permission",
+        #     "auth_group",
+        #     "auth_user",
+        #     "django_content_type",
+        #     "django_session",
+        #     "auth_group_permissions",
+        #     "auth_user_groups",
+        #     "auth_user_user_permissions",
+        #     "books_book",
+        #     "books_dimeducation",
+        #     "django_migrations",
+        #     "app_app",
+        #     "app_publish",
+        #     "hiddenColumns",
+        #     "authtoken_token",
+        #     "sysdiagrams",
+        # ]
+        # for model in apps.get_models():
+        #     if model._meta.db_table not in django_tables:
+        #         table_name.append(model._meta.db_table)
+
+        return Response(table_perms)
 
 
 class TableContentView(viewsets.GenericViewSet):
@@ -94,6 +155,8 @@ class TableContentView(viewsets.GenericViewSet):
 
     def list(self, request, table_name):
         model = apps.get_model(app_label="app", model_name=table_name)
+        perms = self.request.user.get_all_permissions()
+        # print(perms)
         if model is None:
             return JsonResponse({"error": "Table Not Found"}, status=404)
         table_content = model.objects.all()
@@ -115,11 +178,32 @@ class TableContentView(viewsets.GenericViewSet):
             for field in field_names:
                 tmp[field] = getattr(item, field)
             serialized_data.append(tmp)
+        permission = []
+        psplite = []
+        for perm in perms:
+            permission.append(perm[4:])
+        for perm in permission:
+            perms_splite = perm.split("_")
+            psplite.append(perms_splite)
+        # print(permission)
+        # print(psplite)
+        result_dict = {}
+
+        for action, target in psplite:
+            if target not in result_dict:
+                result_dict[target] = [action]
+            else:
+                result_dict[target].append(action)
+
+        result_dict = {key: sorted(value) for key, value in result_dict.items()}
+        print(result_dict)
+
         return JsonResponse(
             {
                 "table_content": serialized_data,
                 "field_names": field_names,
                 "field_type": field_types,
+                "permissions": result_dict,
             }
         )
 
