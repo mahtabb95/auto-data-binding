@@ -239,73 +239,74 @@ export class ListComponent implements OnInit, AfterViewInit {
         ismarried: new FormControl(val.ismarried),
         education: new FormControl(val.education),
       });
+
       this.apiService.getTablesName().subscribe((data: any) => {
 
         this.tablesName = data,
-          console.log(this.tablesName)
+          console.log("tables: ", this.tablesName)
       });
       this.pipes = this.globals.pipeDropdown;
-      this.apiService.getPerson().subscribe((result: any) => {
-        this.personTable = result;
-        console.log(this.personTable);
+      // this.apiService.getPerson().subscribe((result: any) => {
+      //   this.personTable = result;
+      //   console.log(this.personTable);
 
-        this.personTableData = this.personTable.data;
-        this.personTableDataType = this.personTable.dataTypes;
-        console.log("persontabledata", this.personTableData);
+      // this.personTableData = this.personTable.data;
+      // this.personTableDataType = this.personTable.dataTypes;
+      // console.log("persontabledata", this.personTableData);
 
-        this.personTableData.forEach(element => {
-          element.birthdate = moment(element.birthdate, 'YYYY-M-D').format('jYYYY-jM-jD');
-          this.dataCol.push(element);
-        });
-        this.personTableDataType.forEach(element => {
-          this.dataTypeCol.push(element.type);
-        })
-        let headers = [];
-        for (let key in this.dataCol[0]) {
-          headers.push(key);
-        }
-        this.personCol = headers;
-        console.log('personTableDataType ', this.personTableDataType);
-
-
-        let group = {};
-        this.personCol.forEach(input_template => {
-          group[input_template] = new FormControl('');
-        });
-        this.personForm = new FormGroup(group);
+      // this.personTableData.forEach(element => {
+      //   element.birthdate = moment(element.birthdate, 'YYYY-M-D').format('jYYYY-jM-jD');
+      //   this.dataCol.push(element);
+      // });
+      // this.personTableDataType.forEach(element => {
+      //   this.dataTypeCol.push(element.type);
+      // })
+      //   let headers = [];
+      //   for (let key in this.dataCol[0]) {
+      //     headers.push(key);
+      //   }
+      //   this.personCol = headers;
+      //   console.log('personTableDataType ', this.personTableDataType);
 
 
-      });
+      //   let group = {};
+      //   this.personCol.forEach(input_template => {
+      //     group[input_template] = new FormControl('');
+      //   });
+      //   this.personForm = new FormGroup(group);
+
+
+      // });
     };
 
 
-    this.cols = [
-      {
-        field: 'title',
-        header: 'Title'
-      },
-      {
-        field: 'writer',
-        header: 'Writer'
-      },
-      {
-        field: 'age',
-        header: 'Age'
-      },
-      {
-        field: 'ismarried',
-        header: 'Status'
-      },
-      {
-        field: 'education',
-        header: 'Education'
-      },
+    // this.cols = [
+    //   {
+    //     field: 'title',
+    //     header: 'Title'
+    //   },
+    //   {
+    //     field: 'writer',
+    //     header: 'Writer'
+    //   },
+    //   {
+    //     field: 'age',
+    //     header: 'Age'
+    //   },
+    //   {
+    //     field: 'ismarried',
+    //     header: 'Status'
+    //   },
+    //   {
+    //     field: 'education',
+    //     header: 'Education'
+    //   },
 
-      {
-        field: 'published',
-        header: 'Published'
-      },
-    ];
+    //   {
+    //     field: 'published',
+    //     header: 'Published'
+    //   },
+    // ];
   };
 
   navigateToTableContent() {
@@ -331,88 +332,100 @@ export class ListComponent implements OnInit, AfterViewInit {
       return `with: ${reason}`;
     };
   };
-  open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
-      (result) => {
-        if (result === 'saved') {
-          this.savePerson();
-        }
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      },
-    );
-  }
+  // open(content) {
+  //   this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+  //     (result) => {
+  //       if (result === 'saved') {
+  //         this.savePerson();
+  //       }
+  //       this.closeResult = `Closed with: ${result}`;
+  //     },
+  //     (reason) => {
+  //       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //     },
+  //   );
+  // }
+  // deleteUser(item) {
+  //   this.confirmationService.confirm({
+  //     message: 'Are you sure you want to delete this user?',
+  //     header: 'Delete User',
+  //     accept: () => {
+  //       this.apiService.deleteUser(item.userid).subscribe(
+  //         data => this.personTableData = this.personTableData.filter(boo => boo.userid !== item.userid),
+  //         error => console.log(error))
+  //     }
 
-  selectBook(item) {
-    this.selectedBook = item;
-    this.editingBook = null;
-    // console.log(this.selectedBook)
-  }
+  //   })
+  // }
+
+  // editUser(item, content) {
+  //   this.edittingPerson = item;
+  //   this.selectedPerson = null;
+  //   console.log(this.edittingPerson)
+  //   var dateSplit = this.edittingPerson.birthdate.split("-")
+  //   var year = Number(dateSplit[0])
+  //   var month = Number(dateSplit[1])
+  //   var day = Number(dateSplit[2])
+  //   var date: NgbDateStruct = new NgbDate(year, month, day);
+  //   let group = {}
+  //   this.personCol.forEach(input_template => {
+  //     if (input_template === 'birthdate') {
+  //       group['birthdate'] = new FormControl(date);
+  //     } else {
+  //       group[input_template] = new FormControl(this.edittingPerson[input_template]);
+  //     }
+  //   })
+  //   this.id = this.edittingPerson.userid;
+  //   this.personForm = new FormGroup(group);
+  //   this.open(content);
+  // }
+  // selectBook(item) {
+  //   this.selectedBook = item;
+  //   this.editingBook = null;
+  //   // console.log(this.selectedBook)
+  // }
   // selectPerson(item){
   //   this.selectedPerson = item;
   //   this.edittingPerson = null;
   // }
-  editBook(item) {
-    this.editingBook = item;
-    this.selectedBook = null;
-    console.log(this.editingBook)
-    // var date = new Date(item.published)
-    this.id = item.id;
-    var dateSplit = this.editingBook.published.split("-")
-    var year = Number(dateSplit[0])
-    var month = Number(dateSplit[1])
-    var day = Number(dateSplit[2])
-    var date: NgbDateStruct = new NgbDate(year, month, day);
-    this.bookForm = new FormGroup({
-      title: new FormControl(this.editingBook.title),
-      writer: new FormControl(this.editingBook.writer),
-      age: new FormControl(this.editingBook.age),
-      ismarried: new FormControl(this.editingBook.ismarried),
-      education: new FormControl(this.editingBook.education),
-      published: new FormControl(date)
-    });
-    // console.log(this.editingBook)
-    this.modal1?.toggle();
-  }
-  editUser(item, content) {
-    this.edittingPerson = item;
-    this.selectedPerson = null;
-    console.log(this.edittingPerson)
-    var dateSplit = this.edittingPerson.birthdate.split("-")
-    var year = Number(dateSplit[0])
-    var month = Number(dateSplit[1])
-    var day = Number(dateSplit[2])
-    var date: NgbDateStruct = new NgbDate(year, month, day);
-    let group = {}
-    this.personCol.forEach(input_template => {
-      if (input_template === 'birthdate') {
-        group['birthdate'] = new FormControl(date);
-      } else {
-        group[input_template] = new FormControl(this.edittingPerson[input_template]);
-      }
-    })
-    this.id = this.edittingPerson.userid;
-    this.personForm = new FormGroup(group);
-    this.open(content);
-  }
-  createNewBooks() {
-    this.editingBook = { title: '', writer: '', age: '', ismarried: '', education: '', published: '' }
-    this.bookForm = new FormGroup({
-      title: new FormControl(this.editingBook.title),
-      writer: new FormControl(this.editingBook.writer),
-      age: new FormControl(this.editingBook.age),
-      ismarried: new FormControl(this.editingBook.ismarried),
-      education: new FormControl(this.editingBook.education),
-      published: new FormControl(this.editingBook.published)
-    });
-    // console.log(this.bookForm)
-    this.selectedBook = null
-    // console.log(this.selectedBook)
-    this.id = undefined
+  // editBook(item) {
+  //   this.editingBook = item;
+  //   this.selectedBook = null;
+  //   console.log(this.editingBook)
+  //   // var date = new Date(item.published)
+  //   this.id = item.id;
+  //   var dateSplit = this.editingBook.published.split("-")
+  //   var year = Number(dateSplit[0])
+  //   var month = Number(dateSplit[1])
+  //   var day = Number(dateSplit[2])
+  //   var date: NgbDateStruct = new NgbDate(year, month, day);
+  //   this.bookForm = new FormGroup({
+  //     title: new FormControl(this.editingBook.title),
+  //     writer: new FormControl(this.editingBook.writer),
+  //     age: new FormControl(this.editingBook.age),
+  //     ismarried: new FormControl(this.editingBook.ismarried),
+  //     education: new FormControl(this.editingBook.education),
+  //     published: new FormControl(date)
+  //   });
+  //   // console.log(this.editingBook)
+  //   this.modal1?.toggle();
+  // }
+  // createNewBooks() {
+  //   this.editingBook = { title: '', writer: '', age: '', ismarried: '', education: '', published: '' }
+  //   this.bookForm = new FormGroup({
+  //     title: new FormControl(this.editingBook.title),
+  //     writer: new FormControl(this.editingBook.writer),
+  //     age: new FormControl(this.editingBook.age),
+  //     ismarried: new FormControl(this.editingBook.ismarried),
+  //     education: new FormControl(this.editingBook.education),
+  //     published: new FormControl(this.editingBook.published)
+  //   });
+  //   // console.log(this.bookForm)
+  //   this.selectedBook = null
+  //   // console.log(this.selectedBook)
+  //   this.id = undefined
 
-  }
+  // }
 
   // deleteBooks(item) {
   //   this.confirmationService.confirm({
@@ -426,18 +439,6 @@ export class ListComponent implements OnInit, AfterViewInit {
 
   //   })
   // }
-  deleteUser(item) {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to delete this user?',
-      header: 'Delete User',
-      accept: () => {
-        this.apiService.deleteUser(item.userid).subscribe(
-          data => this.personTableData = this.personTableData.filter(boo => boo.userid !== item.userid),
-          error => console.log(error))
-      }
-
-    })
-  }
   // saveForm() {
   //   var d = this.bookForm.value.published
   //   let miladi_d = moment(
@@ -464,107 +465,107 @@ export class ListComponent implements OnInit, AfterViewInit {
   //   this.modal1?.toggle();
   // }
 
-  savePerson() {
-    var d = this.personForm.value.birthdate
-    let miladi_d = moment(d.year + "/" + d.month + "/" + d.day,
-      "jYYYY/jM/jD").format('YYYY-M-D')
-    this.personForm.value.birthdate = miladi_d
-    if (this.id) {
-      this.apiService.updatePerson(this.personForm.value).subscribe(
-        result => {
-          this.personUpdated(result)
-          console.log(result)
-        }
-      )
-      this.id = undefined;
-    } else {
-      this.apiService.createPerson(this.personForm.value).subscribe(
-        result => {
-          this.personCreated(result)
-          console.log(result)
-        },
+  //   savePerson() {
+  //     var d = this.personForm.value.birthdate
+  //     let miladi_d = moment(d.year + "/" + d.month + "/" + d.day,
+  //       "jYYYY/jM/jD").format('YYYY-M-D')
+  //     this.personForm.value.birthdate = miladi_d
+  //     if (this.id) {
+  //       this.apiService.updatePerson(this.personForm.value).subscribe(
+  //         result => {
+  //           this.personUpdated(result)
+  //           console.log(result)
+  //         }
+  //       )
+  //       this.id = undefined;
+  //     } else {
+  //       this.apiService.createPerson(this.personForm.value).subscribe(
+  //         result => {
+  //           this.personCreated(result)
+  //           console.log(result)
+  //         },
 
-        error => console.log(error)
-      );
-    }
-
-
-  }
-  bookCreated(books) {
-
-    books.forEach(element => {
-
-      this.tableData.push(element);
-      element.published = moment(element.published, 'YYYY-M-D').format('jYYYY-jM-jD')
-    });
-
-  }
-  personCreated(person) {
-
-    this.personTableData.push(person);
-    person.birthdate = moment(person.birthdate, 'YYYY-M-D').format('jYYYY-jM-jD')
-  }
-
-  bookUpdated(item) {
-    const indx = this.tableData.findIndex(boo => boo.id === item.id)
-
-    if (indx >= 0) {
-      this.tableData[indx] = item
+  //         error => console.log(error)
+  //       );
+  //     }
 
 
-      this.tableData[indx].published = moment(this.tableData[indx].published, 'YYYY-M-D').format('jYYYY-jM-jD')
-    }
-    this.editingBook = null
-  }
-  personUpdated(item) {
-    const indx = this.personTableData.findIndex(prsn => prsn.userid === item.userid)
+  //   }
+  //   bookCreated(books) {
 
-    if (indx >= 0) {
-      this.personTableData[indx] = item
-      this.personTableData[indx].birthdate = moment(this.personTableData[indx].birthdate, 'YYYY-M-D').format('jYYYY-jM-jD')
-    }
-    this.edittingPerson = null
-  }
+  //     books.forEach(element => {
 
-  reset() {
-    this.InputVar.nativeElement.value = "";
-  }
+  //       this.tableData.push(element);
+  //       element.published = moment(element.published, 'YYYY-M-D').format('jYYYY-jM-jD')
+  //     });
 
-  saveExcel() {
-    this.modal2?.toggle();
-    this.InputVar.nativeElement.value = "";
-  }
-  readExcel(event) {
-    let file = event.target.files[0];
+  //   }
+  //   personCreated(person) {
 
-    let fileReader = new FileReader();
-    fileReader.readAsBinaryString(file);
+  //     this.personTableData.push(person);
+  //     person.birthdate = moment(person.birthdate, 'YYYY-M-D').format('jYYYY-jM-jD')
+  //   }
 
-    fileReader.onload = (e) => {
-      var workBook = XLSX.read(fileReader.result, { type: 'binary' });
-      var sheetNames = workBook.SheetNames;
-      this.excelData = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]])
-      this.excelData.forEach(element => {
-        var dateMiladi = element.published
-        var dateSplit = dateMiladi.split("-")
-        var year = dateSplit[0]
-        var month = dateSplit[1]
-        var day = dateSplit[2]
-        let miladi_d = moment(
-          year + "/" + month + "/" + day,
-          "jYYYY/jM/jD"
-        ).format('YYYY-M-D')
-        element.published = miladi_d
+  //   bookUpdated(item) {
+  //     const indx = this.tableData.findIndex(boo => boo.id === item.id)
 
-      })
-      console.log(this.excelData);
-      // this.apiService.createExcel(this.excelData).subscribe(
-      //   data => {
-      //     this.excelData = data;
-      //     this.bookCreated(data);
-      //   },
-      //   error => console.log(error)
-      // );
-    };
-  }
+  //     if (indx >= 0) {
+  //       this.tableData[indx] = item
+
+
+  //       this.tableData[indx].published = moment(this.tableData[indx].published, 'YYYY-M-D').format('jYYYY-jM-jD')
+  //     }
+  //     this.editingBook = null
+  //   }
+  //   personUpdated(item) {
+  //     const indx = this.personTableData.findIndex(prsn => prsn.userid === item.userid)
+
+  //     if (indx >= 0) {
+  //       this.personTableData[indx] = item
+  //       this.personTableData[indx].birthdate = moment(this.personTableData[indx].birthdate, 'YYYY-M-D').format('jYYYY-jM-jD')
+  //     }
+  //     this.edittingPerson = null
+  //   }
+
+  //   reset() {
+  //     this.InputVar.nativeElement.value = "";
+  //   }
+
+  //   saveExcel() {
+  //     this.modal2?.toggle();
+  //     this.InputVar.nativeElement.value = "";
+  //   }
+  //   readExcel(event) {
+  //     let file = event.target.files[0];
+
+  //     let fileReader = new FileReader();
+  //     fileReader.readAsBinaryString(file);
+
+  //     fileReader.onload = (e) => {
+  //       var workBook = XLSX.read(fileReader.result, { type: 'binary' });
+  //       var sheetNames = workBook.SheetNames;
+  //       this.excelData = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]])
+  //       this.excelData.forEach(element => {
+  //         var dateMiladi = element.published
+  //         var dateSplit = dateMiladi.split("-")
+  //         var year = dateSplit[0]
+  //         var month = dateSplit[1]
+  //         var day = dateSplit[2]
+  //         let miladi_d = moment(
+  //           year + "/" + month + "/" + day,
+  //           "jYYYY/jM/jD"
+  //         ).format('YYYY-M-D')
+  //         element.published = miladi_d
+
+  //       })
+  //       console.log(this.excelData);
+  //       // this.apiService.createExcel(this.excelData).subscribe(
+  //       //   data => {
+  //       //     this.excelData = data;
+  //       //     this.bookCreated(data);
+  //       //   },
+  //       //   error => console.log(error)
+  //       // );
+  //     };
+  //   }
 }

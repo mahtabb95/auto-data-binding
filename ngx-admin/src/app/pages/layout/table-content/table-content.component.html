@@ -1,17 +1,17 @@
 <p-confirmDialog [style]="{width: '40vw'}" [baseZIndex]="999999" acceptButtonStyleClass="p-button-danger"
     rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
-<!-- <div *ngIf="error"> -->
-<!-- <ngb-alert *ngIf="error" [type]="alert.type" (closed)="close(alert)">{{ alert.message }}</ngb-alert> -->
-<!-- </div> -->
+
 <div class="container" *ngIf="tableName">
     <nb-card class="list-card">
         <nb-card-header>{{ tableName }} Content</nb-card-header>
         <nb-card-body>
 
-            <button class="btn btn-lg btn-outline-primary" (click)="open(content,new)">Add</button>
-            <button class="btn btn-lg btn-outline-primary" (click)="openFileImport(fileImport)">Import</button>
+            <button class="btn btn-lg btn-outline-primary" (click)="open(content,new)"
+                *ngIf="actions.includes('add')">Add</button>
+            <button class="btn btn-lg btn-outline-primary" (click)="openFileImport(fileImport)"
+                *ngIf="actions.includes('add')">Import</button>
             <button class="btn btn-lg btn-outline-primary"><a routerLink="/pages/layout/list">Previous page</a></button>
-            <button class="btn btn-lg btn-outline-primary" (click)="exportToExcel()">Export to excel</button>
+            <button class="btn btn-lg btn-outline-primary" (click)="exportToExcel()">Export to excel</button><br><br>
             <ng-template #fileImport let-modal>
                 <div class="modal-header">
                     <h4 class="modal-title" id="modal-basic-title">Import</h4>
@@ -146,10 +146,12 @@
                         <td *ngFor="let column of tableData">
                             {{body[column] | usermarried: column}}
                         </td>
-                        <td>
-                            <p-button (click)="editData(body,content)">Edit</p-button>
-                            <p-button pRipple type="submit" (click)="deleteRecord(body,tableName)"
-                                styleClass="p-button-danger" class="test">Delete</p-button>
+                        <td *ngIf="(actions.includes('change') || actions.includes('delete'))">
+                            <p-button *ngIf="actions.includes('change')"
+                                (click)="editData(body,content)">Edit</p-button>
+                            <p-button *ngIf="actions.includes('delete')" pRipple type="submit"
+                                (click)="deleteRecord(body,tableName)" styleClass="p-button-danger"
+                                class="test">Delete</p-button>
                         </td>
                     </tr>
 

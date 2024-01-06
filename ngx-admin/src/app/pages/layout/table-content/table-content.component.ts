@@ -25,18 +25,11 @@ import { Router } from '@angular/router';
 
 // import { MatIconModule } from '@angular/material/icon';
 
-interface Alert {
-  type: string;
-  message: string;
-}
+
 const WEEKDAYS_SHORT = ['د', 'س', 'چ', 'پ', 'ج', 'ش', 'ی'];
 const MONTHS = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
 
-const ALERTS: Alert[] = [
-  {
-    type: 'Access denied',
-    message: "You don't have permission to do this action!",
-  }];
+
 
 @Injectable()
 export class NgbDatepickerI18nPersian extends NgbDatepickerI18n {
@@ -95,6 +88,8 @@ export class TableContentComponent implements OnInit {
   dateFieldName = null;
   excelData: any[] = [];
   columns: any[] = [];
+  permissions: any;
+  actions: any[] = [];
 
 
   constructor(
@@ -126,12 +121,10 @@ export class TableContentComponent implements OnInit {
 
   fromDate: NgbDate;
   toDate: NgbDate | null = null;
-  alerts: Alert[];
+
   error = null;
 
-  close(alert: Alert) {
-    this.alerts.splice(this.alerts.indexOf(alert), 1);
-  }
+
 
   onDateSelection(date: NgbDate) {
     console.log(date)
@@ -142,8 +135,8 @@ export class TableContentComponent implements OnInit {
     } else {
       this.toDate = null;
       this.fromDate = date;
-    }
-  }
+    };
+  };
   dateFilter(event: NgbDate, datefield_name: string) {
     console.log('date: ', datefield_name)
     let temp = event.year + "-" + event.month + "-" + event.day
@@ -152,15 +145,15 @@ export class TableContentComponent implements OnInit {
       datefield_name,
       FilterMatchMode.EQUALS
     );
-  }
+  };
   isHovered(date: NgbDate) {
     return (
       this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate)
     );
-  }
+  };
   isInside(date: NgbDate) {
     return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
-  }
+  };
 
   isRange(date: NgbDate) {
     return (
@@ -169,10 +162,10 @@ export class TableContentComponent implements OnInit {
       this.isInside(date) ||
       this.isHovered(date)
     );
-  }
+  };
   selectToday() {
     this.model = this.calendar.getToday();
-  }
+  };
 
   ngOnInit(): void {
     const token = this.cookieService.get('token');
@@ -185,17 +178,14 @@ export class TableContentComponent implements OnInit {
         this.loadTableData();
       });
       this.pipes = this.globals.pipeDropdown;
-    }
+    };
   };
   hiddenColumns() {
     this.apiService.hiddenColumns().subscribe((data: any) => {
       data.forEach(element => {
         this.columns.push(element.colname);
       });
-      // (error) => {
-      //   this.error = error.message;
-      //   console.log(this.error)
-      // }
+
       console.log("columns", this.columns);
     });
 
@@ -203,6 +193,10 @@ export class TableContentComponent implements OnInit {
   loadTableData() {
 
     this.apiService.getTableContent(this.tableName).subscribe((data: any) => {
+      // this.permissions = data.permissions
+      this.actions = data.permissions[this.tableName]
+      // console.log("permissions: ", this.permissions[this.tableName]);
+      console.log("actions: ", this.actions);
       console.log("full data: ", data);
       this.tbData = data.field_names;
       this.tbData.forEach(element => {
@@ -220,7 +214,7 @@ export class TableContentComponent implements OnInit {
       data.table_content.forEach(element => {
         if (element[this.dateFieldName]) {
           element[this.dateFieldName] = moment(element[this.dateFieldName], 'YYYY-M-D').format('jYYYY-jM-jD');
-        }
+        };
       });
       this.tbDataType = data.field_type;
       this.tbDataType.forEach(element => {
@@ -235,15 +229,15 @@ export class TableContentComponent implements OnInit {
       });
       this.formGenerator = new FormGroup(group);
 
-    }
-      // (error) => {
-      //   this.error = error.message;
-      //   console.log(this.error)
-      // }
-    );
-
-  }
-
+    }, (res) => {
+      console.log(res.status)
+      this.error = res.status
+      console.log("error: ", this.error)
+      if (this.error) {
+        this.router.navigate(['**']);
+      };
+    });
+  };
   clear(table) {
     table.clear();
   }

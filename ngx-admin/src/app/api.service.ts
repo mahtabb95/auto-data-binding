@@ -58,10 +58,10 @@ export class ApiService {
     return this.httpClient.get(this.baseUrlPipe, { headers: this.headers });
   }
   getTablesName() {
-    return this.httpClient.get(this.baseUrlTable, { headers: this.headers });
+    return this.httpClient.get(this.baseUrlTable, { headers: this.getAuthHeaders() });
   }
 
-  getTableContent(tableName: string) {
+  getTableContent(tableName: string): Observable<any> {
     return this.httpClient.get<any[]>(`${this.baseUrlPostTable}${tableName}/`, { headers: this.getAuthHeaders() });
   }
   createData(data, tableName) {

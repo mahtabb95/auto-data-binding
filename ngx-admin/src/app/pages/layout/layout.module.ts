@@ -42,11 +42,12 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SliderModule } from 'primeng/slider';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { UsermarriedPipe } from '../../usermarried.pipe';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [
     FormsModule,
+    NgbModule,
     NgbDatepickerModule,
     NgbAlertModule,
     ReactiveFormsModule,
