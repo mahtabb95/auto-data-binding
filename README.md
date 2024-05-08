@@ -1,0 +1,1 @@
+It is a auto data binding project. In this program, data is read from the database and based on the type of its columns, models and serializers are created for them. Also, a viewset is written for the CRUD operation, then based on the data type, tables are created to display the data in the UI.
